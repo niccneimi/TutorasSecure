@@ -2,6 +2,7 @@ package com.tutoras.tutoras.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,21 +19,28 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private String email;
+
+    @Column(nullable = true)
+    private String firstName;
+    @Column(nullable = true)
+    private String lastName;
 
     @JsonIgnore
     private String password;
 
     private String role;
+
+    @Column(nullable = true)
     private String extraInfo;
 
     @SuppressWarnings("unused")
     private UserEntity () {}
 
-    public UserEntity (String email, String password, String role, String extraInfo) {
+    public UserEntity (String email, String password, String role) {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.extraInfo = extraInfo;
     }
 }
