@@ -15,6 +15,7 @@ public class JwtDecoder {
     private final JwtProperties properties;
 
     public DecodedJWT decode(String token) {
+        //TODO: проверка истёк ли токен
         return JWT.require(Algorithm.HMAC256(properties.getSecretKey()))
             .build()
             .verify(token);
