@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @Builder
 public class TeacherRequest {
-    private Long studentId;
+    private String email;
 }

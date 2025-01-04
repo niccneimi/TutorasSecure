@@ -1,12 +1,19 @@
 package com.tutoras.tutoras.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.tutoras.tutoras.entity.StudentEntity;
 import com.tutoras.tutoras.entity.TeacherEntity;
+import com.tutoras.tutoras.entity.UserEntity;
+import com.tutoras.tutoras.model.ErrorResponse;
 import com.tutoras.tutoras.model.TeacherResponse;
 import com.tutoras.tutoras.repository.StudentRepository;
 import com.tutoras.tutoras.repository.TeacherRepository;
+import com.tutoras.tutoras.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +23,7 @@ public class TeacherService {
 
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
 
     public TeacherResponse getTeachersStudents(Long teacherId) {
         TeacherEntity teacher = teacherRepository.findById(teacherId).orElseThrow();
@@ -24,9 +32,10 @@ public class TeacherService {
             .build();
     }
 
-    public TeacherResponse addStudent(Long teacherId, Long studentId) {
+    public TeacherResponse addStudent(Long teacherId, String email) {
+        UserEntity studentUser = userRepository.findByEmail(email).orElseThrow();
         TeacherEntity teacher = teacherRepository.findById(teacherId).orElseThrow();
-        StudentEntity newStudent = studentRepository.findById(studentId).orElseThrow();
+        StudentEntity newStudent = studentRepository.findById(studentUser.getId()).orElseThrow();
         if (!teacher.getStudents().contains(newStudent)) {
             newStudent.getTeachers().add(teacher);
             teacher.getStudents().add(newStudent);
@@ -34,7 +43,30 @@ public class TeacherService {
             studentRepository.save(newStudent);
         }
         return TeacherResponse.builder()
-            .students(teacher.getStudents())
+            .students(List.of(newStudent))
             .build();
+    }
+
+    public ResponseEntity<?> getStudentById(Long teacherId, Long studentId) {
+        TeacherEntity teacher = teacherRepository.findById(teacherId).orElseThrow();
+        List<StudentEntity> students = teacher.getStudents();
+        boolean found = false;
+        List<StudentEntity> foundedStudent = new ArrayList<>();
+        for (StudentEntity student : students) {
+            if (student.getStudentId().equals(studentId)){
+                found = true;
+                foundedStudent = List.of(student);
+                break;
+            }
+        }
+        if (found) {
+            return ResponseEntity.ok(TeacherResponse.builder()
+                .students(foundedStudent)
+                .build());
+        }
+        else {
+            ErrorResponse errorResponse = new ErrorResponse(404L,"Студент не найден");
+            return ResponseEntity.status(404).body(errorResponse);
+        }
     }
 }

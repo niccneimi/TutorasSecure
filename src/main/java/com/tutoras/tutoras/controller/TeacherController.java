@@ -9,9 +9,11 @@ import com.tutoras.tutoras.service.TeacherService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -30,7 +32,12 @@ public class TeacherController {
 
     @PostMapping("/teacher/add/student")
     public TeacherResponse addStudent(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Validated TeacherRequest request) {        
-        return teacherService.addStudent(principal.getUserId(),request.getStudentId());
+        return teacherService.addStudent(principal.getUserId(),request.getEmail());
+    }
+
+    @GetMapping("teacher/get/student/{student_id}")
+    public ResponseEntity<?> getStudent(@AuthenticationPrincipal UserPrincipal principal, @PathVariable("student_id") Long studentId) {
+        return teacherService.getStudentById(principal.getUserId(), studentId);
     }
     
     
