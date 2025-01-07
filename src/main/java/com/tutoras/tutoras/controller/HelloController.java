@@ -27,7 +27,5 @@ public class HelloController {
     public String admin(@AuthenticationPrincipal UserPrincipal principal) {
         return "If you see this, you are an ADMIN, USER ID: " + principal.getUserId();
     }
-    
-    
 
 }
