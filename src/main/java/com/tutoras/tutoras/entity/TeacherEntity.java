@@ -3,6 +3,7 @@ package com.tutoras.tutoras.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
@@ -25,11 +26,14 @@ public class TeacherEntity {
 
     @ManyToMany(mappedBy = "teachers")
     @JsonManagedReference
+    @JsonIgnore
     private List<StudentEntity> students = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
+
+    private String subjects;
 
     @SuppressWarnings("unused")
     private TeacherEntity () {}
