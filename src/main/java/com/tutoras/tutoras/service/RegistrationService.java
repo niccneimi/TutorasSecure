@@ -2,12 +2,14 @@ package com.tutoras.tutoras.service;
 
 import java.util.ArrayList;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tutoras.tutoras.entity.StudentEntity;
 import com.tutoras.tutoras.entity.TeacherEntity;
 import com.tutoras.tutoras.entity.UserEntity;
+import com.tutoras.tutoras.model.ErrorResponse;
 import com.tutoras.tutoras.model.RegistrationResponse;
 import com.tutoras.tutoras.repository.StudentRepository;
 import com.tutoras.tutoras.repository.TeacherRepository;
@@ -23,11 +25,10 @@ public class RegistrationService {
     private final StudentRepository studentRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public RegistrationResponse attemptRegistration(String email, String password, String role) {
+    public ResponseEntity<?> attemptRegistration(String email, String password, String role) {
         if (userRepository.findByEmail(email).isPresent()) {
-            return RegistrationResponse.builder()
-                .text("User with this email already exists.")
-                .build();
+            ErrorResponse errorResponse = new ErrorResponse(400L,"Пользователь с данной почтой уже существует");
+            return ResponseEntity.status(400).body(errorResponse);
         }
 
         String encodedPassword = passwordEncoder.encode(password);
@@ -42,8 +43,10 @@ public class RegistrationService {
             studentRepository.save(student);
         }
         
-        return RegistrationResponse.builder()
+        return ResponseEntity.status(201).body(
+            RegistrationResponse.builder()
             .text(user.getEmail())
-            .build();
+            .build()
+        );
     }
 }
