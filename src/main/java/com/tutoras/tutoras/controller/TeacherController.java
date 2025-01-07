@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +39,11 @@ public class TeacherController {
     @GetMapping("teacher/get/student/{student_id}")
     public ResponseEntity<?> getStudent(@AuthenticationPrincipal UserPrincipal principal, @PathVariable("student_id") Long studentId) {
         return teacherService.getStudentById(principal.getUserId(), studentId);
+    }
+
+    @DeleteMapping("teacher/delete/student/{student_id}")
+    public ResponseEntity<?> deleteStudent(@AuthenticationPrincipal UserPrincipal principal, @PathVariable("student_id") Long studentId) {
+        return teacherService.deleteStudentById(principal.getUserId(), studentId);
     }
     
     

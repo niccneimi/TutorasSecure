@@ -40,8 +40,9 @@ public class StudentEntity {
     @SuppressWarnings("unused")
     private StudentEntity () {}
 
-    public StudentEntity (Long studentId, UserEntity user) {
+    public StudentEntity (Long studentId, UserEntity user, List<TeacherEntity> teachers) {
         this.studentId = studentId;
         this.user = user;
+        this.teachers = teachers;
     }
 }

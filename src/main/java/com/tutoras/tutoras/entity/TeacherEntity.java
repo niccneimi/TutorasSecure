@@ -34,9 +34,10 @@ public class TeacherEntity {
     @SuppressWarnings("unused")
     private TeacherEntity () {}
 
-    public TeacherEntity (Long teacherId, UserEntity user) {
+    public TeacherEntity (Long teacherId, UserEntity user, List<StudentEntity> students) {
         this.teacherId = teacherId;
         this.user = user;
+        this.students = students;
     }
 
 }

@@ -69,4 +69,35 @@ public class TeacherService {
             return ResponseEntity.status(404).body(errorResponse);
         }
     }
+
+    public ResponseEntity<?> deleteStudentById(Long teacherId, Long studentId) {
+        TeacherEntity teacher = teacherRepository.findById(teacherId).orElseThrow();
+        List<StudentEntity> students = teacher.getStudents();
+        boolean found = false;
+        List<StudentEntity> foundedStudent = new ArrayList<>();
+        for (int i = 0;i < students.size(); i++) {
+            if (students.get(i).getStudentId().equals(studentId)){
+                found = true;
+                UserEntity userStudent = students.get(i).getUser();
+                List<TeacherEntity> teachers = students.get(i).getTeachers();
+                teachers.remove(teacher);
+                students.remove(i);
+                TeacherEntity newTeacher = new TeacherEntity(teacherId, teacher.getUser(), students);
+                StudentEntity newStudent = new StudentEntity(studentId, userStudent, teachers);
+                teacherRepository.save(newTeacher);
+                studentRepository.save(newStudent);
+                break;
+            }
+        }
+        if (found) {
+            return ResponseEntity.ok(TeacherResponse.builder()
+                .students(foundedStudent)
+                .build());
+        }
+        else {
+            ErrorResponse errorResponse = new ErrorResponse(404L,"Студент не найден");
+            return ResponseEntity.status(404).body(errorResponse);
+        }
+
+    }
 }
