@@ -44,7 +44,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/teacher/**").hasRole("TEACHER")
                                 .requestMatchers("/student/**").hasRole("STUDENT")
-                                .requestMatchers("/proffile").authenticated()
+                                .requestMatchers("/profile").authenticated()
                                 .requestMatchers("/registration").permitAll()
                                 .anyRequest().authenticated()
                 );
