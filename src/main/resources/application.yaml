@@ -1,3 +1,11 @@
+server:
+  port:
+    8081
+logging:
+  level:
+    root: "warn"
+    org.springframework.web: "error"
+    org.hibernate: "error"
 security:
     jwt:
         secret-key: thisprojecthasbeenindevelopmentforalongtimesecret
