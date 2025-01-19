@@ -48,6 +48,10 @@ public class WebSecurityConfig {
                                 .requestMatchers("/profile").authenticated()
                                 .requestMatchers("/registration").permitAll()
                                 .requestMatchers("/actuator/**").permitAll()
+                                .requestMatchers("/myteacher/**").hasRole("STUDENT")
+                                .requestMatchers("/mystudent/**").hasRole("TEACHER")
+                                .requestMatchers("/v3/api-docs/**").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
@@ -72,7 +76,7 @@ public class WebSecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://0.0.0.0:1234"));
+        config.setAllowedOrigins(Arrays.asList("http://0.0.0.0:1234","http://0.0.0.0:8081"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         source.registerCorsConfiguration("/**", config);
@@ -83,7 +87,7 @@ public class WebSecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.setAllowedOrigins(Arrays.asList("http://0.0.0.0:1234"));
+        configuration.setAllowedOrigins(Arrays.asList("http://0.0.0.0:1234","http://0.0.0.0:8081"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
